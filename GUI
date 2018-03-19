@@ -2,6 +2,7 @@ from tkinter import *
 import tkinter.messagebox
 
 mainWindow = Tk() #window
+canvas = Canvas(mainWindow, width = 500, height = 500)
 
 
 
@@ -15,9 +16,9 @@ mainWindow.geometry("450x500")
 mainWindow.configure(background = "white")
 
 optionsX = ["Select an Option", "By Discipline", "By Year"]
+graphType = ["Bar graph", "Histogram", "Pie chart", "Scatter plot"]
 disciplinesAvailable = ["Mechanical", "Civil", "Chemistry", "Eng Phys", "Eng Chem", "Electrical", "Computer", "Geological", "Mining", "Apple"]
 yearsAvailable = ["First", "Second", "Third", "Fourth", "Fifth", "Unknown"]
-
 
 
 
@@ -65,7 +66,6 @@ disciplineOptionsLabel = Label(mainWindow, text="Discipline Options:", font=("Co
 yearOptionsLabel = Label(mainWindow, text="Year Options:", font=("Courier", 15))
 title = Label(mainWindow, text="Engineering Wellness Center", font=("Courier", 23))
 graphOptionsLabelY = Label(mainWindow, text = "Y-Axis Options:", font=("Courier", 15))
-timePeriod = Label(mainWindow, text = "Time Period:", font=("Courier", 15))
 graphVisualOptionsLabel = Label(mainWindow, text = "Graph Type:", font=("Courier", 15))
 toText = Label(mainWindow, text = "To", font=("Courier", 15))
 
@@ -78,6 +78,9 @@ selectedOption.set(optionsX[0])
 selectedOptionDiscipline = StringVar()
 selectedOptionDiscipline.set(disciplinesAvailable[0])
 
+selectedVisual = StringVar()
+selectedVisual.set(graphType[0])
+
 selectedYear = StringVar()
 selectedYear.set(yearsAvailable[0])
 
@@ -85,11 +88,15 @@ selectedYear.set(yearsAvailable[0])
 
 
 
+#visual selection
+graphVisualOptions = OptionMenu(mainWindow, selectedVisual, *graphType, command = storeValueGraphType)
 #Primary selection
 graphOptions = OptionMenu(mainWindow, selectedOption, *optionsX, command = updateGraph)
 #sub options 1
 disciplineOptions = OptionMenu(mainWindow, selectedOptionDiscipline, *disciplinesAvailable, command = storeValueOption)
 yearOptions = OptionMenu(mainWindow, selectedYear, *yearsAvailable, command = storeValueOption)
+
+
 graphButton = Button(mainWindow, text = "Plot Graph", command = passToFunction)
 
 
@@ -101,6 +108,8 @@ graphOptions.place(x=0, y=130)
 graphOptionsLabelY.place(x = 0, y = 110)
 
 graphButton.place(x = 0, y = 245)
+graphVisualOptions.place(x=0, y=60)
+graphVisualOptionsLabel.place(x = 0, y = 40)
 
 
 
