@@ -5,8 +5,8 @@ data = list(csv.reader(open('EWCForm_TestData.csv')))
 
 #function that iterates through 'data' matrix and makes two new lists with pertinent information for graphing
 def makeGraphData(yAxisIn, graphType):
-
-    if yAxisIn == "first" or "second" or "third" or "fourth" or "fifth":
+    #plots a given year against time
+    if yAxisIn == "first" or yAxisIn == "second" or yAxisIn == "third" or yAxisIn == "fourth" or yAxisIn == "fifth":
         #init
         xAxis = []
         xAxisTemp = []
@@ -33,12 +33,25 @@ def makeGraphData(yAxisIn, graphType):
         #split mymatrix into 1d lists yAxis and xAxis
         yAxis = mymatrix[0]
         xAxis = mymatrix[1]
-        
+    
         #print out lists to test functionality
         print(yAxis)
         print(xAxis)
-
-
+    #plots the respective sums of all years in a pie or bar chart
+    elif yAxisIn == "allYears":
+        yAxis = [["Fifth","Fourth","Third","Second","First","Unknown"]]
+        yAxisTemp = [0,0,0,0,0,0]
+        unknownSum = 0
+        for i in data[1:]:
+            for j in range(0,6):
+                sum = 0
+                for k in range(0,8):
+                    index = (j+9) + 6*k
+                    if i[index]:
+                        sum += int(i[index])
+                yAxisTemp[j] += sum
+        yAxis.append(yAxisTemp)
+        print(yAxis)
 
 #sums the frequency of visit for the year to be graphed, for each data entry
 def sumYears(data, startVal, label):
@@ -82,9 +95,10 @@ def consolidateEntries(xAxisTemp,yAxisTemp):
     return mymatrix
 
 #test call
-makeGraphData("first","scatter")
-makeGraphData("second","scatter")
-makeGraphData("third","scatter")
-makeGraphData("fourth","scatter")
-makeGraphData("fifth","scatter")
+'''makeGraphData("first","scatter")
+    makeGraphData("second","scatter")
+    makeGraphData("third","scatter")
+    makeGraphData("fourth","scatter")
+    makeGraphData("fifth","scatter")'''
+makeGraphData("allYears","scatter")
 
