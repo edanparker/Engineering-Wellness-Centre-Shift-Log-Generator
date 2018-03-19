@@ -3,6 +3,9 @@ import tkinter.messagebox
 
 mainWindow = Tk() #window
 canvas = Canvas(mainWindow, width = 500, height = 500)
+myImage = PhotoImage(file = '/Users/charliemaslechko/PycharmProjects/MOD3/mainEWCFINAL.gif')
+canvas.create_image(240, 295, anchor = NW, image = myImage)
+canvas.pack()
 
 
 
@@ -19,6 +22,7 @@ optionsX = ["Select an Option", "By Discipline", "By Year"]
 graphType = ["Bar graph", "Histogram", "Pie chart", "Scatter plot"]
 disciplinesAvailable = ["Mechanical", "Civil", "Chemistry", "Eng Phys", "Eng Chem", "Electrical", "Computer", "Geological", "Mining", "Apple"]
 yearsAvailable = ["First", "Second", "Third", "Fourth", "Fifth", "Unknown"]
+
 
 
 
@@ -66,6 +70,7 @@ disciplineOptionsLabel = Label(mainWindow, text="Discipline Options:", font=("Co
 yearOptionsLabel = Label(mainWindow, text="Year Options:", font=("Courier", 15))
 title = Label(mainWindow, text="Engineering Wellness Center", font=("Courier", 23))
 graphOptionsLabelY = Label(mainWindow, text = "Y-Axis Options:", font=("Courier", 15))
+timePeriod = Label(mainWindow, text = "Time Period:", font=("Courier", 15))
 graphVisualOptionsLabel = Label(mainWindow, text = "Graph Type:", font=("Courier", 15))
 toText = Label(mainWindow, text = "To", font=("Courier", 15))
 
@@ -95,10 +100,14 @@ graphOptions = OptionMenu(mainWindow, selectedOption, *optionsX, command = updat
 #sub options 1
 disciplineOptions = OptionMenu(mainWindow, selectedOptionDiscipline, *disciplinesAvailable, command = storeValueOption)
 yearOptions = OptionMenu(mainWindow, selectedYear, *yearsAvailable, command = storeValueOption)
-
+#Date entry
+dateOne = Entry(mainWindow)
+dateTwo = Entry(mainWindow)
 
 graphButton = Button(mainWindow, text = "Plot Graph", command = passToFunction)
 
+dateOne.insert(END, 'YYYY-MM-DD')
+dateTwo.insert(END, 'YYYY-MM-DD')
 
 #titles
 #main title
@@ -106,6 +115,10 @@ title.place(x=0,y=0)
 #subtitles
 graphOptions.place(x=0, y=130)
 graphOptionsLabelY.place(x = 0, y = 110)
+timePeriod.place(x = 200, y = 40)
+dateOne.place(x = 200, y = 60)
+toText.place(x = 200, y = 89)
+dateTwo.place(x = 200, y = 109)
 
 graphButton.place(x = 0, y = 245)
 graphVisualOptions.place(x=0, y=60)
