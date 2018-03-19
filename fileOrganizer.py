@@ -27,21 +27,21 @@ def makeGraphData(yAxisIn, graphType):
             yAxisTemp = sumYears(data, 10, "Fourth Year")
         elif yAxisIn == "fifth":
             yAxisTemp = sumYears(data, 9, "Fifth Year")
-
+    
         mymatrix = consolidateEntries(xAxisTemp,yAxisTemp)
         
         #split mymatrix into 1d lists yAxis and xAxis
         yAxis = mymatrix[0]
         xAxis = mymatrix[1]
-    
+        
         #print out lists to test functionality
         print(yAxis)
         print(xAxis)
+
     #plots the respective sums of all years in a pie or bar chart
     elif yAxisIn == "allYears":
         yAxis = [["Fifth","Fourth","Third","Second","First","Unknown"]]
         yAxisTemp = [0,0,0,0,0,0]
-        unknownSum = 0
         for i in data[1:]:
             for j in range(0,6):
                 sum = 0
@@ -53,11 +53,63 @@ def makeGraphData(yAxisIn, graphType):
         yAxis.append(yAxisTemp)
         print(yAxis)
 
+    #plots a given discipline against time
+    elif yAxisIn == "apple" or yAxisIn == "chemEng" or yAxisIn == "civil" or yAxisIn == "comp" or yAxisIn == "elec" or yAxisIn == "engPhys" or yAxisIn == "geo" or yAxisIn == "mining":
+        xAxis = []
+        xAxisTemp = []
+        yAxis = []
+        yAxisTemp = []
+        #reads timestamps into temporary x-axis list, renames label appropriately
+        for i in data:
+            xAxisTemp.append(i[0])
+        xAxisTemp[0] = "Time"
+        #selection structure to interpret string input into values for indexing data matrix
+        if yAxisIn == "Apple":
+            yAxisTemp = sumDisciplines(data, 9, "Applied Mathematics and Engineering")
+        elif yAxisIn == "ChemEng":
+            yAxisTemp = sumDisciplines(data, 15, "Chemical Engineering")
+        elif yAxisIn == "Civil":
+            yAxisTemp = sumDisciplines(data, 21, "Civil Engineering")
+        elif yAxisIn == "Comp":
+            yAxisTemp = sumDisciplines(data, 27, "Computer Engineering")
+        elif yAxisIn == "Elec":
+            yAxisTemp = sumDisciplines(data, 33, "Electrical Engineering")
+        elif yAxisIn == "EngPhys":
+            yAxisTemp = sumDisciplines(data, 39, "Engineering Physics")
+        elif yAxisIn == "Geo":
+            yAxisTemp = sumDisciplines(data, 45, "Geological Engineering")
+        elif yAxisIn == "Mining":
+            yAxisTemp = sumDisciplines(data, 51, "Mining Engineering")
+        
+        mymatrix = consolidateEntries(xAxisTemp,yAxisTemp)
+        
+        #split mymatrix into 1d lists yAxis and xAxis
+        yAxis = mymatrix[0]
+        xAxis = mymatrix[1]
+        
+        #print out lists to test functionality
+        print(yAxis)
+        print(xAxis)
+    elif yAxisIn == "allDisciplines":
+        yAxis = [["Applied Mathematics and Engineering","Chemical Engineering","Civil Engineering","Computer Engineering","Electrical Engineering","Engineering Physics","Geological Engineering","Mining Engineering"]]
+        yAxisTemp = [0,0,0,0,0,0,0,0]
+        unknownSum = 0
+        for i in data[1:]:
+            for j in range(0,8):
+                sum = 0
+                offset = 6*j
+                for k in range(0,6):
+                    index = k+9 + offset
+                    if i[index]:
+                        sum += int(i[index])
+                yAxisTemp[j] += sum
+        yAxis.append(yAxisTemp)
+        print(yAxis)
+
 #sums the frequency of visit for the year to be graphed, for each data entry
 def sumYears(data, startVal, label):
     #sets label
     yAxisTemp = [label]
-    
     for j in data[1:]:
         sum = 0
         for k in range(0,8):
@@ -94,11 +146,23 @@ def consolidateEntries(xAxisTemp,yAxisTemp):
     mymatrix.append(xAxis)
     return mymatrix
 
+def sumDisciplines(data,startVal, label):
+    #sets label
+    yAxisTemp = [label]
+    for j in data[1:]:
+        sum = 0
+        for k in range(0,6):
+            index = k + startVal
+            if j[index]:
+                sum += int(j[index])
+        yAxisTemp.append(sum)
+    return yAxisTemp
+
 #test call
 '''makeGraphData("first","scatter")
     makeGraphData("second","scatter")
     makeGraphData("third","scatter")
     makeGraphData("fourth","scatter")
-    makeGraphData("fifth","scatter")'''
-makeGraphData("allYears","scatter")
-
+    makeGraphData("fifth","scatter")
+    makeGraphData("allYears","scatter")'''
+makeGraphData("allDisciplines","scatter")
