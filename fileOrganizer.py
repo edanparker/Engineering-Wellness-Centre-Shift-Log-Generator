@@ -9,13 +9,10 @@ def makeGraphData(yAxisIn, graphType):
     if yAxisIn == "first" or yAxisIn == "second" or yAxisIn == "third" or yAxisIn == "fourth" or yAxisIn == "fifth":
         #init
         xAxis = []
-        xAxisTemp = []
+        xAxisTemp = readTimeIn(data)
         yAxis = []
         yAxisTemp = []
-        #reads timestamps into temporary x-axis list, renames label appropriately
-        for i in data:
-            xAxisTemp.append(i[0])
-        xAxisTemp[0] = "Time"
+        
         #selection structure to interpret string input into values for indexing data matrix
         if yAxisIn == "first":
             yAxisTemp = sumYears(data, 13, "First Year")
@@ -40,6 +37,7 @@ def makeGraphData(yAxisIn, graphType):
 
     #plots the respective sums of all years in a pie or bar chart
     elif yAxisIn == "allYears":
+        xAxis = readTimeIn(data)
         yAxis = [["Fifth","Fourth","Third","Second","First","Unknown"]]
         yAxisTemp = [0,0,0,0,0,0]
         for i in data[1:]:
@@ -56,13 +54,9 @@ def makeGraphData(yAxisIn, graphType):
     #plots a given discipline against time
     elif yAxisIn == "apple" or yAxisIn == "chemEng" or yAxisIn == "civil" or yAxisIn == "comp" or yAxisIn == "elec" or yAxisIn == "engPhys" or yAxisIn == "geo" or yAxisIn == "mining":
         xAxis = []
-        xAxisTemp = []
+        xAxisTemp = readTimeIn(data)
         yAxis = []
         yAxisTemp = []
-        #reads timestamps into temporary x-axis list, renames label appropriately
-        for i in data:
-            xAxisTemp.append(i[0])
-        xAxisTemp[0] = "Time"
         #selection structure to interpret string input into values for indexing data matrix
         if yAxisIn == "Apple":
             yAxisTemp = sumDisciplines(data, 9, "Applied Mathematics and Engineering")
@@ -90,7 +84,9 @@ def makeGraphData(yAxisIn, graphType):
         #print out lists to test functionality
         print(yAxis)
         print(xAxis)
+    #plots the respective sums of all disciplines in a pie or bar chart
     elif yAxisIn == "allDisciplines":
+        xAxis = readTimeIn(data)
         yAxis = [["Applied Mathematics and Engineering","Chemical Engineering","Civil Engineering","Computer Engineering","Electrical Engineering","Engineering Physics","Geological Engineering","Mining Engineering"]]
         yAxisTemp = [0,0,0,0,0,0,0,0]
         unknownSum = 0
@@ -105,6 +101,23 @@ def makeGraphData(yAxisIn, graphType):
                 yAxisTemp[j] += sum
         yAxis.append(yAxisTemp)
         print(yAxis)
+
+    #plots a given topic of discussion vs time
+    elif yAxisIn == "Academic Stress" or yAxisIn == "Academic Performance" or yAxisIn == "Academic Path" or yAxisIn == "Alcohol/substance abuse" or yAxisIn == "Disability" or yAxisIn == "Employment and/or Career Direction" or yAxisIn == "Extra-curricular involvement" or yAxisIn == "Financial Concerns" or yAxisIn == "Health and Fitness" or yAxisIn == "Time Management" or yAxisIn == "Organization" or yAxisIn == "Loneliness or Isolation" or yAxisIn == "Major life change/ Trauma" or yAxisIn == "Mental Health Issues" or yAxisIn == "Relationship with family or friend" or yAxisIn == "Relationship with partner" or yAxisIn == "Relationship with Professor/TA" or yAxisIn == "Sexual/Gender Identity" or yAxisIn == "Sexual Health" or yAxisIn == "Sleep" or yAxisIn == "Smoking" or yAxisIn == "Personal identity":
+        xAxis = []
+        xAxisTemp = readTimeIn(data)
+        yAxis = []
+        yAxisTemp = sumTopics(data,yAxisIn)
+        mymatrix = consolidateEntries(xAxisTemp,yAxisTemp)
+        #split mymatrix into 1d lists yAxis and xAxis
+        yAxis = mymatrix[0]
+        xAxis = mymatrix[1]
+
+        #print out lists to test functionality
+        print(yAxis)
+        print(xAxis)
+
+
 
 #sums the frequency of visit for the year to be graphed, for each data entry
 def sumYears(data, startVal, label):
@@ -158,6 +171,24 @@ def sumDisciplines(data,startVal, label):
         yAxisTemp.append(sum)
     return yAxisTemp
 
+def sumTopics(data, label):
+    yAxisTemp = [label]
+    for j in data[1:]:
+        if label in j[4]:
+            yAxisTemp.append(1)
+        else:
+            yAxisTemp.append(0)
+    return yAxisTemp
+
+
+#reads timestamps into temporary x-axis list, renames label appropriately
+def readTimeIn(data):
+    xAxisTemp = []
+    for i in data:
+        xAxisTemp.append(i[0])
+        xAxisTemp[0] = "Time"
+    return xAxisTemp
+
 #test call
 '''makeGraphData("first","scatter")
     makeGraphData("second","scatter")
@@ -165,4 +196,4 @@ def sumDisciplines(data,startVal, label):
     makeGraphData("fourth","scatter")
     makeGraphData("fifth","scatter")
     makeGraphData("allYears","scatter")'''
-makeGraphData("allDisciplines","scatter")
+makeGraphData("Time Management","scatter")
