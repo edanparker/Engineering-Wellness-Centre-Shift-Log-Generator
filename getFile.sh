@@ -2,8 +2,8 @@
 
 cd "$( dirname "${BASH_SOURCE[0]}" )"
 
-curl -L "https://docs.google.com/spreadsheets/d/e/2PACX-1vTTmsjEUx3A2oV2aFigvCzXOcGRqaTsa8s8yMqW0QRPzKJG-Cw_Hy35nFt_0DcrUwGKWGLDuYuRDUFL/pub?output=csv" > ./test.csv
+curl -L "https://docs.google.com/spreadsheets/d/e/2PACX-1vRCnr0DlcJGfauyvRQcWqod0NbchoAv5C1j9eaYVe4QG8PONIy4NCA4igvurbIdfppw1wAHZSmtcGjE/pub?output=csv" >EWCdata_DO_NOT_MODIFY.csv
 
-open test.txt
+open EWCdata_DO_NOT_MODIFY.txt
 
 killall Terminal
