@@ -1,18 +1,34 @@
 import csv
+from tkinter import *
+# reads data into matrix
+data = list(csv.reader(open('EWCForm_TestData.csv')))
 
-#reads data into matrix
-data = list(csv.reader(open('/Users/connordunham/Desktop/EWCForm_TestData.csv')))
 
-#Takes the comments from the CSV file and put them in a seperate matrix
-def extractComments(n):
-    #inti
+def mostRecentComment( n ):
+    # init
+    checker = True
+    counter = 0
+    entries = []
+    lenColumn = len(n)
+    lastEntry = lenColumn - 1
+    unformatedRecentComments = []
+    recentComments = [['DATE', 'TIME', 'OVERAL COMMENTS', 'ONE ON ONE CONVERSTAIONS\n(IF APPLICABLE)', 'WHAT WENT WELL', 'IDEAS FOR THE NEXT MEETING', 'EMPLOYEE 1', 'EMPLOYEE 2']] #creates the headers for the table that is produced in the "comentWindowFunction"
+    date = []
+    time = []
+    catagory1 = []
+    catagory2 = []
+    catagory3 = []
+    catagory4 = []
+    employee1 = []
+    employee2 = []
     shiftComment = []
     oneOnOneConv = []
     whatWentWell = []
+    mostRecentDate = n[lastEntry][0][:11]
     suggestionsForNextMeeting = []
     comments = []
     
-    #put each type of comment in a list
+    # put each type of comment in a list
     for item in n:
         shiftComment.append(item[5])
     for item in n:
@@ -22,48 +38,25 @@ def extractComments(n):
     for item in n:
         suggestionsForNextMeeting.append(item[8])
 
-    #make an array with each catagory of comment taking a different row
+    # make an array with each catagory of comment taking a different row
     comments.append(shiftComment)
     comments.append(oneOnOneConv)
     comments.append(whatWentWell)
     comments.append(suggestionsForNextMeeting)
 
-return comments
-
-def mostRecentComment (n, comments):
-    
-    #init
-    checker = True
-    counter = 0
-    entries = []
-    lenColumn = len(n)
-    firstEntry = lenColumn -1
-    unformatedRecentComments = []
-    recentComments = []
-    date = []
-    time = []
-    catagory1 = []
-    catagory2 = []
-    catagory3 = []
-    catagory4 = []
-    employee1 = []
-    employee2 = []
-    
-    
-    
-    mostRecentDate = n[firstEntry][0][:11] #takes only the date of the most recent log entry (year/month/day)
-    
-    while checker:
-        i = firstEntry-counter
+while checker:
+    i = lastEntry - counter
         
         if mostRecentDate == n[i][0][:11]:
-            entries.append(i) #collects the indices of any other entries with the same dates
+            entries.append(i)  # collects the indices of any other entries with the same dates
         
-        #checks to see if the while loop is at the end of the matrix
-        elif counter >= firstEntry:
+        # checks to see if the while loop is at the end of the matrix
+        elif counter >= lastEntry:
             checker = False
-        counter += 1
-#Collects the comments from the entries and organizes them into catagories
+    counter += 1
+
+
+# Collects the comments from the entries and organizes them into catagories
 for j in range(len(entries)):
     date.append(n[entries[j]][0][:9])
     time.append(n[entries[j]][0][10:15])
@@ -73,7 +66,7 @@ for j in range(len(entries)):
     catagory4.append(n[entries[j]][8])
     employee1.append(n[entries[j]][1])
     employee2.append(n[entries[j]][2])
-    #Puts all of the entries into a single list so that they can be arranged by entry
+    # Puts all of the entries into a single list so that they can be arranged by entry
     for k in range(len(catagory1)):
         unformatedRecentComments.append(date[k])
         unformatedRecentComments.append(time[k])
@@ -84,10 +77,52 @@ for j in range(len(entries)):
         unformatedRecentComments.append(employee1[k])
         unformatedRecentComments.append(employee2[k])
     
-    #Arranges the data so each row is one entry of comments
+    # Arranges the data so each row is one entry of comments
     for l in range(len(entries)):
-        indx1 = l*8
-        indx2 = indx1 + 8
+        indx1 = l * (len(unformatedRecentComments[0])-1)
+        indx2 = indx1 + (len(unformatedRecentComments[0])-1)
         recentComments.append(unformatedRecentComments[indx1:indx2])
     
+    
     return recentComments
+
+#Displays the most recent comments in a seperate window in a grid
+def commentWindowFunction (array):
+    #init
+    lenColumns = len(array[0])
+    lenRows = len(array)
+    
+    #Setting up the comment window
+    commentWindow = Tk()
+    commentWindow.title("Recent Comments")
+    frame = Frame(commentWindow)
+    commentWindow.grid()
+    frame = Frame(commentWindow, width=100, height=100)
+    frame.grid(row=0, column=0)
+    
+    #The commented code below is suppposed make sure that the text stays within a certain size of column, but it is not working
+    '''
+        for i in range(lenRows):
+        for j in range(lenColumns):
+        char_num = 0
+        for k in range (len(array[i][j])):
+        #char_num += 1
+        if k%20 > 20:
+        array.append('\n')'''
+    
+    #Displays the array of shift informations such that each element has a part of the tables
+    for i in range(lenRows):
+        for j in range(lenColumns):
+            l = Label(text=array[i][j], relief=SUNKEN)
+            l.grid(row=i, column=j, sticky=NSEW, columnspan=2) #Sets the maximum column span so all information fields can be viewed in the window
+
+commentWindow.mainloop()
+
+
+
+
+
+#Function testing code
+recentComments = mostRecentComment(data)
+commentWindowFunction(recentComments)
+
