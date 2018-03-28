@@ -1,7 +1,5 @@
 import csv
 from tkinter import *
-# reads data into matrix
-data = list(csv.reader(open('EWCForm_TestData.csv')))
 
 
 def mostRecentComment( n ):
@@ -12,7 +10,8 @@ def mostRecentComment( n ):
     lenColumn = len(n)
     lastEntry = lenColumn - 1
     unformatedRecentComments = []
-    recentComments = [['DATE', 'TIME', 'OVERAL COMMENTS', 'ONE ON ONE CONVERSTAIONS\n(IF APPLICABLE)', 'WHAT WENT WELL', 'IDEAS FOR THE NEXT MEETING', 'EMPLOYEE 1', 'EMPLOYEE 2']] #creates the headers for the table that is produced in the "comentWindowFunction"
+    #This intitalization of "recentComments" gives the headers for the columns
+    recentComments = [['DATE', 'TIME', 'OVERAL COMMENTS', 'ONE ON ONE CONVERSTAIONS\n(IF APPLICABLE)', 'WHAT WENT WELL', 'IDEAS FOR THE NEXT MEETING', 'EMPLOYEE 1', 'EMPLOYEE 2']]
     date = []
     time = []
     catagory1 = []
@@ -86,43 +85,36 @@ for j in range(len(entries)):
     
     return recentComments
 
-#Displays the most recent comments in a seperate window in a grid
+
+
 def commentWindowFunction (array):
-    #init
+    # init
     lenColumns = len(array[0])
     lenRows = len(array)
     
-    #Setting up the comment window
+    # Setting up the comment window
     commentWindow = Tk()
     commentWindow.title("Recent Comments")
-    frame = Frame(commentWindow)
     commentWindow.grid()
     frame = Frame(commentWindow, width=100, height=100)
     frame.grid(row=0, column=0)
     
-    #The commented code below is suppposed make sure that the text stays within a certain size of column, but it is not working
-    '''
-        for i in range(lenRows):
-        for j in range(lenColumns):
-        char_num = 0
-        for k in range (len(array[i][j])):
-        #char_num += 1
-        if k%20 > 20:
-        array.append('\n')'''
-    
-    #Displays the array of shift informations such that each element has a part of the tables
+    #Displays the array of shift informations such that each element is a text field in grid
     for i in range(lenRows):
         for j in range(lenColumns):
-            l = Label(text=array[i][j], relief=SUNKEN)
-            l.grid(row=i, column=j, sticky=NSEW, columnspan=2) #Sets the maximum column span so all information fields can be viewed in the window
+            entry = Text(commentWindow, width=22, height=10, wrap=WORD)
+            entry.insert(END, array[i][j])
+            entry.grid(row=i, column=j, sticky=NSEW)
 
 commentWindow.mainloop()
 
 
+#Examply use of the functions "commentWindowFunction" and "mostRecentComments"
 
-
-
-#Function testing code
+# reads data into matrix
+data = list(csv.reader(open('/Users/connordunham/Desktop/EWCForm_TestData.csv')))
+#Extracts most recent comments
 recentComments = mostRecentComment(data)
+#Displays most recent comments
 commentWindowFunction(recentComments)
 

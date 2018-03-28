@@ -185,7 +185,7 @@ def sumTopics(data, label):
 def readTimeIn(data):
     xAxisTemp = []
     for i in data:
-        xAxisTemp.append(i[0])
+        xAxisTemp.append(i[0][:9])
         xAxisTemp[0] = "Time"
     return xAxisTemp
 
