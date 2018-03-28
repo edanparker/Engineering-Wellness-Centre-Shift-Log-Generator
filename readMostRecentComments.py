@@ -1,17 +1,15 @@
 import csv
 from tkinter import *
 
-
-def mostRecentComment( n ):
-    # init
+def commentWindowFunction (n):
     checker = True
     counter = 0
     entries = []
-    lenColumn = len(n)
-    lastEntry = lenColumn - 1
+    lenColumnCSV = len(n)
+    lastEntry = lenColumnCSV - 1
     unformatedRecentComments = []
     #This intitalization of "recentComments" gives the headers for the columns
-    recentComments = [['DATE', 'TIME', 'OVERAL COMMENTS', 'ONE ON ONE CONVERSTAIONS\n(IF APPLICABLE)', 'WHAT WENT WELL', 'IDEAS FOR THE NEXT MEETING', 'EMPLOYEE 1', 'EMPLOYEE 2']]
+    recentComments = [['DATE', 'TIME', 'OVERRAL COMMENTS', 'ONE ON ONE CONVERSATIONS\n(IF APPLICABLE)', 'WHAT WENT WELL?', 'IDEAS FOR THE NEXT MEETING', 'EMPLOYEE 1', 'EMPLOYEE 2']]
     date = []
     time = []
     catagory1 = []
@@ -26,6 +24,15 @@ def mostRecentComment( n ):
     mostRecentDate = n[lastEntry][0][:11]
     suggestionsForNextMeeting = []
     comments = []
+    lenColumns = 0
+    lenRows = 0
+    
+    # Setting up the comment window
+    commentWindow = Tk()
+    commentWindow.title("Recent Comments")
+    commentWindow.grid()
+    frame = Frame(commentWindow, width=100, height=100)
+    frame.grid(row=0, column=0)
     
     # put each type of comment in a list
     for item in n:
@@ -36,7 +43,7 @@ def mostRecentComment( n ):
         whatWentWell.append(item[7])
     for item in n:
         suggestionsForNextMeeting.append(item[8])
-
+    
     # make an array with each catagory of comment taking a different row
     comments.append(shiftComment)
     comments.append(oneOnOneConv)
@@ -82,28 +89,15 @@ for j in range(len(entries)):
         indx2 = indx1 + (len(unformatedRecentComments[0])-1)
         recentComments.append(unformatedRecentComments[indx1:indx2])
     
+    lenColumns = len(recentComments)-1
+    lenRows = len(recentComments[0])-1
     
-    return recentComments
-
-
-
-def commentWindowFunction (array):
-    # init
-    lenColumns = len(array[0])
-    lenRows = len(array)
-    
-    # Setting up the comment window
-    commentWindow = Tk()
-    commentWindow.title("Recent Comments")
-    commentWindow.grid()
-    frame = Frame(commentWindow, width=100, height=100)
-    frame.grid(row=0, column=0)
     
     #Displays the array of shift informations such that each element is a text field in grid
-    for i in range(lenRows):
-        for j in range(lenColumns):
+    for i in range(lenColumns):
+        for j in range(lenRows):
             entry = Text(commentWindow, width=22, height=10, wrap=WORD)
-            entry.insert(END, array[i][j])
+            entry.insert(END, recentComments[i][j])
             entry.grid(row=i, column=j, sticky=NSEW)
 
 commentWindow.mainloop()
@@ -113,8 +107,5 @@ commentWindow.mainloop()
 
 # reads data into matrix
 data = list(csv.reader(open('/Users/connordunham/Desktop/EWCForm_TestData.csv')))
-#Extracts most recent comments
-recentComments = mostRecentComment(data)
 #Displays most recent comments
-commentWindowFunction(recentComments)
-
+commentWindowFunction(data)
