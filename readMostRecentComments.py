@@ -90,20 +90,27 @@ for j in range(len(entries)):
         recentComments.append(unformatedRecentComments[indx1:indx2])
     
     lenColumns = len(recentComments)-1
-    lenRows = len(recentComments[0])-1
+    lenRows = len(recentComments[0])
     
     
     #Displays the array of shift informations such that each element is a text field in grid
+    for j in range(lenRows):
+        label = Text(commentWindow, width=22, height=2, wrap=WORD, bg="black", fg="white")
+        label.insert(END, recentComments[0][j])
+        label.tag_add("here", "1.0", "1.30")
+        #label.tag_config("here", background="black", foreground="white")
+        label.grid(row=0, column=j, sticky=NSEW)
+    
     for i in range(lenColumns):
         for j in range(lenRows):
-            entry = Text(commentWindow, width=22, height=10, wrap=WORD)
-            entry.insert(END, recentComments[i][j])
-            entry.grid(row=i, column=j, sticky=NSEW)
+            entry = Text(commentWindow, width=22, height=10, wrap=WORD, bg="grey")
+            entry.insert(END, recentComments[i+1][j])
+            entry.grid(row=i+1, column=j, sticky=NSEW)
 
 commentWindow.mainloop()
 
 
-#Examply use of the functions "commentWindowFunction" and "mostRecentComments"
+#Example use of the function "commentWindowFunction"
 
 # reads data into matrix
 data = list(csv.reader(open('/Users/connordunham/Desktop/EWCForm_TestData.csv')))
